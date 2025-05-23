@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BB-8 聊天功能测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #1a1a1a;
+            color: white;
+            min-height: 100vh;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .status-panel {
+            background: #2a2a2a;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid #4CAF50;
+        }
+        .btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .btn:hover {
+            background: #45a049;
+        }
+        .error { border-left-color: #f44336; }
+        .warning { border-left-color: #ff9800; }
+        .result {
+            background: #333;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+    </style>
+    <!-- Import the fixed CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="header">
+        <h1>🤖 BB-8 聊天功能测试</h1>
+        <p>测试修复后的聊天系统是否正常工作</p>
+    </div>
+
+    <div class="status-panel">
+        <h3>✅ 已修复的问题：</h3>
+        <ul>
+            <li><strong>CSS语法错误</strong>：修复了第2397行的emoji编码问题</li>
+            <li><strong>JavaScript编码问题</strong>：修复了中文字符显示问题</li>
+            <li><strong>聊天按钮位置</strong>：已移到页面底部中央</li>
+            <li><strong>BB-8个性设置</strong>：Elvis机器人角色已完善</li>
+        </ul>
+    </div>
+
+    <div class="status-panel warning">
+        <h3>⚙️ 测试步骤：</h3>
+        <ol>
+            <li>检查页面底部是否有"Chat with BB-8"按钮</li>
+            <li>点击按钮，看是否出现聊天窗口</li>
+            <li>在聊天窗口输入消息测试回复功能</li>
+            <li>检查BB-8的个性化回复是否正确</li>
+        </ol>
+    </div>
+
+    <button class="btn" onclick="runTests()">🧪 运行自动测试</button>
+    <button class="btn" onclick="location.href='index.html'">🚀 打开完整页面</button>
+
+    <div id="test-results"></div>
+
+    <!-- BB-8 Chat Interface (copied from main page) -->
+    <div class="bb8-chat-container">
+        <!-- Chat Toggle Button -->
+        <button id="chat-toggle" class="chat-toggle-btn">
+            <span class="chat-icon">💬</span>
+            <span class="chat-text">Chat with BB-8</span>
+        </button>
+        
+        <!-- Chat Box -->
+        <div id="chat-box" class="chat-box hidden">
+            <div class="chat-header">
+                <div class="chat-title">
+                    <span class="bb8-avatar">🤖</span>
+                    <span>BB-8 Assistant</span>
+                </div>
+                <button id="chat-close" class="chat-close">×</button>
+            </div>
+            
+            <div class="chat-messages" id="chat-messages">
+                <div class="message bb8-message">
+                    <div class="message-content">
+                        <p>滴滴嘟嘟！我是BB-8，由Elvis建造！我在这里帮助你，让你天天开心！🌟 今天我能为你做什么呢？</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chat-input-container">
+                <input type="text" id="chat-input" placeholder="对BB-8说些什么..." autocomplete="off">
+                <button id="send-btn" class="send-btn">
+                    <span>▶</span>
+                </button>
+            </div>
+            
+            <div class="chat-status" id="chat-status"></div>
+        </div>
+        
+        <!-- Floating Chat Bubble -->
+        <div id="chat-bubble" class="chat-bubble hidden">
+            <div class="bubble-content" id="bubble-content"></div>
+            <div class="bubble-tail"></div>
+        </div>
+    </div>
+
+    <!-- Include the chat JavaScript -->
+    <script src="bb8-chat.js"></script>
+
+    <script>
+        function runTests() {
+            const resultsDiv = document.getElementById('test-results');
+            resultsDiv.innerHTML = '<h3>🧪 测试结果：</h3>';
+            
+            const tests = [
+                {
+                    name: 'CSS文件加载',
+                    test: () => document.styleSheets.length > 0,
+                    details: () => `加载了 ${document.styleSheets.length} 个样式表`
+                },
+                {
+                    name: 'Chat Toggle按钮存在',
+                    test: () => document.getElementById('chat-toggle') !== null,
+                    details: () => '聊天切换按钮已找到'
+                },
+                {
+                    name: 'Chat Box元素存在',
+                    test: () => document.getElementById('chat-box') !== null,
+                    details: () => '聊天窗口元素已找到'
+                },
+                {
+                    name: 'BB8ChatSystem类已定义',
+                    test: () => typeof BB8ChatSystem !== 'undefined',
+                    details: () => 'BB8ChatSystem类已正确加载'
+                },
+                {
+                    name: 'Chat Toggle按钮样式',
+                    test: () => {
+                        const btn = document.getElementById('chat-toggle');
+                        if (!btn) return false;
+                        const styles = window.getComputedStyle(btn);
+                        return styles.position === 'fixed' && styles.bottom !== 'auto';
+                    },
+                    details: () => {
+                        const btn = document.getElementById('chat-toggle');
+                        const styles = window.getComputedStyle(btn);
+                        return `position: ${styles.position}, bottom: ${styles.bottom}`;
+                    }
+                },
+                {
+                    name: 'JavaScript初始化',
+                    test: () => typeof window.bb8Chat !== 'undefined',
+                    details: () => 'BB-8聊天系统已初始化'
+                }
+            ];
+
+            tests.forEach(test => {
+                const passed = test.test();
+                const status = passed ? '✅' : '❌';
+                const details = test.details();
+                
+                resultsDiv.innerHTML += `
+                    <div class="result">
+                        <strong>${status} ${test.name}</strong><br>
+                        <small>${details}</small>
+                    </div>
+                `;
+            });
+
+            // Final recommendation
+            const allPassed = tests.every(test => test.test());
+            const finalStatus = allPassed ? 
+                '<div class="status-panel"><h3>🎉 所有测试通过！</h3><p>聊天系统应该可以正常工作了。点击底部的"Chat with BB-8"按钮开始聊天！</p></div>' :
+                '<div class="status-panel error"><h3>⚠️ 部分测试失败</h3><p>请检查上面的测试结果，可能需要刷新页面或检查控制台错误。</p></div>';
+            
+            resultsDiv.innerHTML += finalStatus;
+        }
+
+        // Auto-run tests when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(runTests, 1000);
+        });
+
+        // Monitor click events
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('#chat-toggle')) {
+                console.log('Chat toggle clicked!');
+                setTimeout(() => {
+                    const chatBox = document.getElementById('chat-box');
+                    if (chatBox && !chatBox.classList.contains('hidden')) {
+                        alert('🎉 聊天窗口成功打开！BB-8现在可以和你聊天了！');
+                    }
+                }, 100);
+            }
+        });
+    </script>
+</body>
+</html> 

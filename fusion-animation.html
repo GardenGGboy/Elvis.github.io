@@ -1,0 +1,2020 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elvis's blog</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chivo+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            width: 100vw;
+            height: 100vh;
+            background: #000000;
+            cursor: none;
+            overflow-x: hidden;
+            overflow-y: auto;
+            margin: 0;
+            padding: 0;
+            font-family: 'Chivo Mono', monospace;
+            scroll-behavior: smooth;
+        }
+
+        /* Loader Animation - 上方 */
+        .loader {
+            display: flex;
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader svg.logo {
+            width: 120px;
+            height: auto;
+            overflow: visible;
+        }
+
+        /* Snake Animation */
+        @keyframes snake {
+            0%, 19% {
+                stroke-dashoffset: -81px;
+            }
+            50%, 100% {
+                stroke-dashoffset: 81px;
+            }
+        }
+
+        .loader svg.logo path {
+            animation: snake 2.4s linear infinite;
+            stroke-dasharray: 81px 100px;
+            stroke-dashoffset: -99px;
+            stroke: #f40c3f;
+            stroke-width: 7;
+        }
+
+        /* Drop Animations */
+        @keyframes drop-in {
+            0% {
+                transform: translate3d(-20px, 20px, 0) scale(0.1);
+            }
+            20% {
+                transform: translate3d(10px, -10px, 0) scale(1);
+            }
+            20.01%, 100% {
+                transform: scale(0);
+            }
+        }
+
+        @keyframes drop-out {
+            0%, 49.99% {
+                transform: translate3d(20px, -20px, 0) scale(0);
+            }
+            50% {
+                transform: translate3d(-10px, 10px, 0) scale(1);
+            }
+            80%, 100% {
+                transform: translate3d(15px, -15px, 0) scale(0);
+            }
+        }
+
+        @keyframes drop-out-2 {
+            0%, 49.99% {
+                transform: translate3d(20px, -20px, 0) scale(0);
+            }
+            50% {
+                transform: translate3d(-10px, 10px, 0) scale(1);
+            }
+            100% {
+                transform: translate3d(10px, -20px, 0) scale(0);
+            }
+        }
+
+        .loader svg.logo rect {
+            fill: #ffffff;
+        }
+
+        .loader svg.logo rect:nth-child(1) {
+            animation: drop-in 2.4s cubic-bezier(0.32, 0, 0.67, 0) infinite;
+            transform-origin: -9px 24px;
+        }
+
+        .loader svg.logo rect:nth-child(2) {
+            animation: drop-out 2.4s cubic-bezier(0.33, 1, 0.68, 1) infinite;
+            transform-origin: 66px -9px;
+        }
+
+        .loader svg.logo rect:nth-child(3) {
+            animation: drop-out-2 2.4s cubic-bezier(0.33, 1, 0.68, 1) infinite;
+            transform-origin: 66px -9px;
+        }
+
+        /* Rainbow SVG - 中间 */
+        .rainbow-container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            height: 100%;
+        }
+
+        .rainbow-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .rainbow-svg text {
+            font-size: 12vw;
+            font-family: "DM Sans", sans-serif;
+            font-weight: 700;
+            line-height: 0.9;
+        }
+
+        .rainbow-svg .text {
+            fill: #1a1a1a;
+            stroke: #333333;
+            stroke-width: 2px;
+        }
+
+        .rainbow-svg .overlay {
+            fill: #1a1a1a;
+            mix-blend-mode: overlay;
+        }
+
+        /* 自定义光标 */
+        .cursor {
+            position: fixed;
+            top: -0.5vw;
+            left: -0.5vw;
+            z-index: 4;
+            width: 1vw;
+            height: 1vw;
+            background: #f40c3f;
+            border-radius: 50%;
+            mix-blend-mode: difference;
+            transform: translate3d(var(--x), var(--y), 0);
+        }
+
+        /* Noise Effect */
+        @keyframes noise {
+            0% {
+                transform: translate3d(0, 0, 0);
+            }
+            10% {
+                transform: translate3d(-100px, -100px, 0);
+            }
+            20% {
+                transform: translate3d(100px, -90px, 0);
+            }
+            30% {
+                transform: translate3d(-90px, 80px, 0);
+            }
+            40% {
+                transform: translate3d(80px, -70px, 0);
+            }
+            50% {
+                transform: translate3d(-70px, 60px, 0);
+            }
+            60% {
+                transform: translate3d(60px, -50px, 0);
+            }
+            70% {
+                transform: translate3d(-50px, 40px, 0);
+            }
+            80% {
+                transform: translate3d(40px, -30px, 0);
+            }
+            90% {
+                transform: translate3d(-30px, 20px, 0);
+            }
+            100% {
+                transform: translate3d(20px, -10px, 0);
+            }
+        }
+
+        .noise {
+            position: fixed;
+            top: -100px;
+            right: -100px;
+            bottom: -100px;
+            left: -100px;
+            animation: noise 0.6s steps(1) infinite;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+            background-size: 250px 250px;
+            overflow: hidden;
+            pointer-events: none;
+            will-change: transform;
+            z-index: 0;
+        }
+
+        /* 导航链接 */
+        .nav-link {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+            z-index: 5;
+            padding: 1rem 2rem;
+            border: 1px solid #f40c3f;
+            border-radius: 0.5rem;
+            background: rgba(244, 12, 63, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-link:hover {
+            color: #f40c3f;
+            background: rgba(244, 12, 63, 0.2);
+        }
+
+        /* 标题 */
+        .title {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            color: #ffffff;
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            z-index: 5;
+        }
+
+        .title .accent {
+            color: #f40c3f;
+        }
+
+        /* 学校Logo样式 */
+        .school-logos {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 4;
+        }
+
+        .school-logo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid #f40c3f;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 15px;
+            box-shadow: 
+                0 0 20px rgba(244, 12, 63, 0.3),
+                inset 0 0 20px rgba(255, 255, 255, 0.1);
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .school-logo::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(244, 12, 63, 0.1), transparent);
+            transform: rotate(-45deg);
+            transition: all 0.8s ease;
+            opacity: 0;
+        }
+
+        .school-logo:hover::before {
+            opacity: 1;
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%) translateY(-100%) rotate(-45deg);
+            }
+            50% {
+                transform: translateX(0%) translateY(0%) rotate(-45deg);
+            }
+            100% {
+                transform: translateX(100%) translateY(100%) rotate(-45deg);
+            }
+        }
+
+        .school-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 50%;
+            transition: all 0.5s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .school-logo:hover {
+            transform: scale(1.1) rotate(5deg);
+            border-color: #ffffff;
+            box-shadow: 
+                0 0 40px rgba(244, 12, 63, 0.6),
+                0 0 80px rgba(244, 12, 63, 0.3),
+                inset 0 0 30px rgba(255, 255, 255, 0.2);
+        }
+
+        .school-logo:hover img {
+            transform: scale(1.05);
+            filter: brightness(1.1) contrast(1.1);
+        }
+
+        /* 左侧Logo */
+        .school-logos.left {
+            left: 3rem;
+        }
+
+        /* 右侧Logo */
+        .school-logos.right {
+            right: 3rem;
+        }
+
+        /* Logo标签 */
+        .school-label {
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ffffff;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: center;
+            opacity: 0;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .school-logo:hover .school-label {
+            opacity: 1;
+            bottom: -35px;
+        }
+
+        /* 脉冲动画 */
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 
+                    0 0 20px rgba(244, 12, 63, 0.3),
+                    inset 0 0 20px rgba(255, 255, 255, 0.1);
+            }
+            50% {
+                box-shadow: 
+                    0 0 40px rgba(244, 12, 63, 0.5),
+                    0 0 60px rgba(244, 12, 63, 0.2),
+                    inset 0 0 30px rgba(255, 255, 255, 0.15);
+            }
+        }
+
+        .school-logo {
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .school-logo:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .school-logo:nth-child(2) {
+            animation-delay: 1.5s;
+        }
+
+        /* 连接线动画 */
+        .connection-line {
+            position: fixed;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .connection-line::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                rgba(244, 12, 63, 0) 0%,
+                rgba(244, 12, 63, 0.3) 20%,
+                rgba(255, 255, 255, 0.2) 50%,
+                rgba(244, 12, 63, 0.3) 80%,
+                rgba(244, 12, 63, 0) 100%
+            );
+            animation: flow 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes flow {
+            0% {
+                opacity: 0.3;
+                transform: scaleX(0.8);
+            }
+            100% {
+                opacity: 0.8;
+                transform: scaleX(1);
+            }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .loader {
+                top: 15%;
+            }
+            
+            .loader svg.logo {
+                width: 80px;
+            }
+            
+            .rainbow-svg text {
+                font-size: 18vw;
+            }
+            
+            .cursor {
+                width: 3vw;
+                height: 3vw;
+                top: -1.5vw;
+                left: -1.5vw;
+            }
+
+            .school-logos.left {
+                left: 1rem;
+            }
+
+            .school-logos.right {
+                right: 1rem;
+            }
+
+            .school-logo {
+                width: 80px;
+                height: 80px;
+                padding: 10px;
+            }
+
+            .school-label {
+                font-size: 0.6rem;
+                bottom: -30px;
+            }
+
+            .school-logo:hover .school-label {
+                bottom: -25px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .school-logos.left {
+                top: 40%;
+                left: 0.5rem;
+            }
+
+            .school-logos.right {
+                top: 60%;
+                right: 0.5rem;
+            }
+
+            .school-logo {
+                width: 60px;
+                height: 60px;
+                padding: 8px;
+            }
+        }
+
+        /* 主容器 */
+        .main-container {
+            height: 300vh; /* 三个屏幕高度 */
+        }
+
+        /* 第一部分 - 原有的融合动画 */
+        .section-fusion {
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 第二部分 - Luge Mouse Demo */
+        .section-luge {
+            height: 100vh;
+            position: relative;
+            background: #000000;
+            overflow: hidden;
+        }
+
+        /* 第三部分 - 个人简介 */
+        .section-profile {
+            height: 100vh;
+            position: relative;
+            background: linear-gradient(45deg, #000000 0%, #1a1a1a 25%, #333333 50%, #1a1a1a 75%, #000000 100%);
+            overflow-y: auto;
+            overflow-x: hidden;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 2rem 0;
+        }
+
+        /* 像素风格容器 */
+        .pixel-container {
+            max-width: 900px;
+            width: 90%;
+            background: #000000;
+            border: 4px solid #f40c3f;
+            border-radius: 0;
+            position: relative;
+            padding: 2rem;
+            margin: 1rem 0;
+            box-shadow: 
+                0 0 0 4px #ffffff,
+                0 0 0 8px #f40c3f,
+                0 0 30px rgba(244, 12, 63, 0.5),
+                inset 0 0 30px rgba(244, 12, 63, 0.1);
+            z-index: 5;
+        }
+
+        .pixel-container::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            right: -8px;
+            bottom: -8px;
+            background: linear-gradient(45deg, #ffffff, #000000, #ffffff, #000000);
+            background-size: 20px 20px;
+            z-index: -1;
+            animation: pixelBorder 2s linear infinite;
+        }
+
+        @keyframes pixelBorder {
+            0% { background-position: 0 0; }
+            100% { background-position: 20px 20px; }
+        }
+
+        /* 像素风格标题 */
+        .pixel-title {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 1.8rem;
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            padding-top: 1rem;
+            text-shadow: 
+                2px 2px 0 #f40c3f,
+                4px 4px 0 #000000;
+            animation: pixelGlow 3s ease-in-out infinite alternate;
+            position: relative;
+            z-index: 10;
+        }
+
+        .pixel-title .name {
+            color: #f40c3f;
+            display: block;
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
+        }
+
+        @keyframes pixelGlow {
+            0% {
+                text-shadow: 
+                    2px 2px 0 #f40c3f,
+                    4px 4px 0 #000000;
+            }
+            100% {
+                text-shadow: 
+                    2px 2px 0 #f40c3f,
+                    4px 4px 0 #000000,
+                    0 0 20px #f40c3f;
+            }
+        }
+
+        /* 个人信息网格 */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 6;
+        }
+
+        .info-card {
+            background: #1a1a1a;
+            border: 2px solid #ffffff;
+            padding: 1.2rem;
+            position: relative;
+            margin-top: 1rem;
+        }
+
+        .info-card::before {
+            content: attr(data-title);
+            position: absolute;
+            top: -12px;
+            left: 1rem;
+            background: #000000;
+            color: #f40c3f;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.8rem;
+            padding: 0 1rem;
+            text-transform: uppercase;
+        }
+
+        .info-card h3 {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.9rem;
+            color: #f40c3f;
+            margin: 0 0 1rem 0;
+            text-transform: uppercase;
+        }
+
+        .info-card p, .info-card ul {
+            font-family: 'Chivo Mono', monospace;
+            font-size: 0.9rem;
+            color: #ffffff;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .info-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-card li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-card li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #f40c3f;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.6rem;
+        }
+
+        /* 技能条 */
+        .skill-bar {
+            margin: 0.8rem 0;
+            position: relative;
+            z-index: 6;
+        }
+
+        .skill-name {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.6rem;
+            color: #ffffff;
+            margin-bottom: 0.4rem;
+        }
+
+        .skill-progress {
+            width: 100%;
+            height: 18px;
+            background: #000000;
+            border: 2px solid #ffffff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #f40c3f 0%, #ffffff 50%, #f40c3f 100%);
+            background-size: 18px 18px;
+            animation: skillMove 2s linear infinite;
+            transition: width 2s ease;
+        }
+
+        .skill-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(
+                    45deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(255, 255, 255, 0.1) 2px,
+                    rgba(255, 255, 255, 0.1) 4px
+                );
+            animation: skillMove 2s linear infinite;
+        }
+
+        @keyframes skillMove {
+            0% { transform: translateX(-8px); }
+            100% { transform: translateX(8px); }
+        }
+
+        /* ASCII Art 装饰 */
+        .ascii-art {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.5rem;
+            color: #f40c3f;
+            text-align: center;
+            line-height: 1.1;
+            margin: 1.5rem 0;
+            white-space: pre;
+            position: relative;
+            z-index: 6;
+        }
+
+        /* 社交链接 */
+        .pixel-social {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+            position: relative;
+            z-index: 6;
+        }
+
+        .pixel-link {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.6rem;
+            color: #ffffff;
+            text-decoration: none;
+            border: 2px solid #f40c3f;
+            padding: 0.8rem;
+            background: #000000;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .pixel-link:hover {
+            background: #f40c3f;
+            color: #000000;
+            transform: translate(-2px, -2px);
+            box-shadow: 2px 2px 0 #ffffff;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .section-profile {
+                padding: 1rem 0;
+                height: auto;
+                min-height: 100vh;
+            }
+            
+            .pixel-container {
+                padding: 1.5rem;
+                margin: 0.5rem;
+                width: 95%;
+            }
+            
+            .pixel-title {
+                font-size: 1.2rem;
+                margin-bottom: 1rem;
+                padding-top: 0.5rem;
+            }
+            
+            .pixel-title .name {
+                font-size: 0.9rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                margin-bottom: 1rem;
+            }
+
+            .info-card {
+                padding: 1rem;
+                margin-top: 0.8rem;
+            }
+
+            .info-card::before {
+                font-size: 0.6rem;
+            }
+
+            .info-card h3 {
+                font-size: 0.7rem;
+            }
+
+            .info-card p, .info-card ul {
+                font-size: 0.8rem;
+            }
+
+            .skill-name {
+                font-size: 0.5rem;
+            }
+
+            .ascii-art {
+                font-size: 0.4rem;
+                margin: 1rem 0;
+            }
+            
+            .pixel-social {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+                margin-top: 1rem;
+            }
+
+            .pixel-link {
+                font-size: 0.5rem;
+                padding: 0.6rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .pixel-container {
+                padding: 1rem;
+                margin: 0.25rem;
+                width: 98%;
+            }
+
+            .pixel-title {
+                font-size: 1rem;
+            }
+
+            .pixel-title .name {
+                font-size: 0.8rem;
+            }
+
+            .ascii-art {
+                font-size: 0.35rem;
+                line-height: 1;
+            }
+        }
+
+        /* 滚动指示器 */
+        .scroll-indicator {
+            position: fixed;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            color: #ffffff;
+            text-align: center;
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-indicator .scroll-text {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .scroll-indicator .scroll-icon {
+            width: 2px;
+            height: 30px;
+            background: linear-gradient(to bottom, #f40c3f, transparent);
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .scroll-indicator .scroll-icon::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 6px;
+            background: #f40c3f;
+            border-radius: 50%;
+            animation: scrollDot 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-5px);
+            }
+        }
+
+        @keyframes scrollDot {
+            0% {
+                top: 0;
+                opacity: 1;
+            }
+            100% {
+                top: 24px;
+                opacity: 0;
+            }
+        }
+
+        /* Luge Mouse Demo 样式 - 黑白红主色 */
+        .luge-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%);
+            z-index: 1;
+        }
+
+        .luge-background__shadow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .luge-background__shadow:nth-child(1) {
+            background: transparent linear-gradient(168deg, rgba(244, 12, 63, 0) 0%, rgba(244, 12, 63, 0.3) 100%) 0% 0% no-repeat padding-box;
+            mix-blend-mode: soft-light;
+            opacity: 0.8;
+        }
+
+        .luge-background__shadow:nth-child(2) {
+            background: transparent radial-gradient(closest-side at -3% 116%, rgba(244, 12, 63, 0.5) 0%, rgba(244, 12, 63, 0.2) 42%, rgba(244, 12, 63, 0) 100%) 0% 0% no-repeat padding-box;
+            mix-blend-mode: soft-light;
+            opacity: 1;
+        }
+
+        .luge-background__shadow:nth-child(3) {
+            background: transparent radial-gradient(closest-side at 99% 66%, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 28%, rgba(255, 255, 255, 0.02) 42%, rgba(255, 255, 255, 0) 100%) 0% 0% no-repeat padding-box;
+            mix-blend-mode: soft-light;
+            opacity: 0.5;
+        }
+
+        .luge-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .creature {
+            position: absolute;
+            bottom: 20%;
+            left: calc(50% - 167px);
+            width: 334px;
+            height: 466px;
+            transform: perspective(20em) rotateY(calc((var(--mouse-progress-x) - 0.5) * 5deg));
+            z-index: 2;
+        }
+
+        .creature:after {
+            display: block;
+            position: absolute;
+            top: calc(100% - 11px);
+            right: -71px;
+            left: -71px;
+            height: 22px;
+            background-color: rgba(244, 12, 63, 0.1);
+            border-radius: 50%;
+            content: "";
+        }
+
+        .creature__body {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(calc(180deg + (var(--mouse-progress-x) - 0.5) * 60deg), #ffffff 25%, #cccccc 75%);
+            border: 3px solid #f40c3f;
+            border-radius: 999em 999em 0 0;
+            z-index: 2;
+            box-shadow: 
+                0 0 30px rgba(244, 12, 63, 0.3),
+                inset 0 0 50px rgba(244, 12, 63, 0.1);
+        }
+
+        .creature__horns {
+            transform: perspective(30em) rotateY(calc((var(--mouse-progress-x) - 0.5) * 10deg));
+        }
+
+        .creature__horn {
+            display: block;
+            position: absolute;
+            top: 0;
+            width: 122px;
+            height: auto;
+            z-index: 1;
+        }
+
+        .creature__horn path {
+            fill: url(#hornGradient) !important;
+        }
+
+        .creature__horn:first-child {
+            left: -90px;
+        }
+
+        .creature__horn:last-child {
+            right: -90px;
+        }
+
+        .creature__eyes {
+            position: absolute;
+            bottom: 61.8%;
+            left: calc(50% - 78px);
+            width: 156px;
+            height: 80px;
+            z-index: 3;
+        }
+
+        .creature__eye {
+            position: absolute;
+            bottom: 0;
+            width: 75px;
+            height: 80px;
+            background: radial-gradient(ellipse at 50% 82%, #f40c3f 0%, #8a0a25 100%);
+            border: 2px solid #ffffff;
+            border-radius: 999em 999em 0 0;
+            box-shadow: 
+                0 0 20px rgba(244, 12, 63, 0.5),
+                inset 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+
+        .creature__eye:first-child {
+            left: 0;
+        }
+
+        .creature__eye:last-child {
+            right: 0;
+        }
+
+        .creature__eye:before,
+        .creature__eye:after {
+            display: block;
+            position: absolute;
+            content: "";
+        }
+
+        .creature__eye:before {
+            bottom: 5px;
+            left: 20px;
+            width: 35px;
+            height: 35px;
+            background-color: #000000;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            transform: translate3d(calc((var(--mouse-progress-x) - 0.5) * 20px), calc((var(--mouse-progress-y) - 0.85) * 30px), 0);
+            z-index: 2;
+        }
+
+        .creature__eye:after {
+            bottom: 10px;
+            left: 30px;
+            width: 12px;
+            height: 15px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            transform: translate3d(calc((var(--mouse-progress-x) - 0.5) * 35px), calc((var(--mouse-progress-y) - 1) * 45px), 0);
+            z-index: 3;
+        }
+
+        .creature__mouth {
+            position: absolute;
+            bottom: 240px;
+            left: 80px;
+            width: 174px;
+            height: 4px;
+            background-color: #000000;
+            border-radius: 2px;
+            transform: perspective(20em) rotateY(calc((var(--mouse-progress-x) - 0.5) * 20deg));
+            z-index: 3;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .creature__mouth:before,
+        .creature__mouth:after {
+            display: block;
+            position: absolute;
+            top: 100%;
+            width: 30px;
+            height: 12px;
+            background-color: #000000;
+            border-radius: 0 0 5px 5px;
+            content: "";
+        }
+
+        .creature__mouth:before {
+            left: 56px;
+        }
+
+        .creature__mouth:after {
+            right: 56px;
+        }
+
+        /* 自定义光标样式 - 黑白红主色 */
+        .lg-cursor .lg-cursor-pointer:nth-child(1):before {
+            margin: -15px 0 0 -15px;
+            width: 30px;
+            height: 30px;
+            background: rgba(244, 12, 63, 0.3);
+            border: 2px solid #f40c3f;
+        }
+
+        .lg-cursor .lg-cursor-pointer:nth-child(2):before {
+            background-color: #ffffff;
+            border: 1px solid #f40c3f;
+        }
+
+        .lg-cursor .lg-cursor-trail path {
+            stroke: #f40c3f;
+            stroke-width: 6px;
+        }
+
+        /* 部分标题 */
+        .section-title {
+            position: absolute;
+            top: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ffffff;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            z-index: 10;
+            text-align: center;
+        }
+
+        .section-title .accent {
+            color: #f40c3f;
+        }
+
+        /* Profile Card - Neo Brutalism Style */
+        .profile-card-section {
+            margin: 2rem 0;
+            position: relative;
+            z-index: 6;
+        }
+
+        .card-container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: #000000;
+            border: 4px solid #f40c3f;
+            box-shadow: 
+                8px 8px 0 #ffffff,
+                12px 12px 0 #f40c3f,
+                0 0 30px rgba(244, 12, 63, 0.3);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .card-container:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 
+                12px 12px 0 #ffffff,
+                16px 16px 0 #f40c3f,
+                0 0 40px rgba(244, 12, 63, 0.5);
+        }
+
+        .card-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(244, 12, 63, 0.1), transparent);
+            animation: cardShine 3s infinite;
+            z-index: 1;
+        }
+
+        @keyframes cardShine {
+            0% { left: -100%; }
+            50% { left: 100%; }
+            100% { left: 100%; }
+        }
+
+        .upper-container {
+            height: 140px;
+            background: #f40c3f;
+            border-bottom: 4px solid #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            position: relative;
+            z-index: 2;
+        }
+
+        .image-container {
+            width: 100px;
+            height: 100px;
+            background: #000000;
+            border: 4px solid #ffffff;
+            transform: translateY(50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 3;
+        }
+
+        .image-container img {
+            width: 90px;
+            height: 90px;
+            object-fit: cover;
+            border: 2px solid #f40c3f;
+            filter: contrast(1.1) brightness(1.1);
+        }
+
+        .lower-container {
+            padding: 60px 20px 30px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .lower-container h3 {
+            margin: 0;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #f40c3f;
+            font-family: 'Press Start 2P', monospace;
+            text-shadow: 2px 2px 0 #ffffff;
+        }
+
+        .lower-container h4 {
+            margin: 5px 0 15px;
+            font-size: 0.8rem;
+            color: #ffffff;
+            font-family: 'Chivo Mono', monospace;
+            font-weight: normal;
+        }
+
+        .lower-container p {
+            font-size: 0.9rem;
+            color: #ffffff;
+            border: 2px dashed #f40c3f;
+            padding: 10px;
+            background: #1a1a1a;
+            margin-bottom: 20px;
+            font-family: 'Chivo Mono', monospace;
+            line-height: 1.6;
+        }
+
+        .lower-container .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #f40c3f;
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: bold;
+            border: 3px solid #ffffff;
+            box-shadow: 4px 4px 0 #000000;
+            transition: all 0.2s ease;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+        }
+
+        .lower-container .btn:hover {
+            background: #ffffff;
+            color: #f40c3f;
+            border: 3px solid #f40c3f;
+            box-shadow: 6px 6px 0 #000000;
+            transform: translate(-2px, -2px);
+        }
+
+        /* Profile Card 响应式设计 */
+        @media (max-width: 768px) {
+            .card-container {
+                max-width: 90%;
+                margin: 0 auto;
+            }
+
+            .upper-container {
+                height: 120px;
+            }
+
+            .image-container {
+                width: 80px;
+                height: 80px;
+            }
+
+            .image-container img {
+                width: 70px;
+                height: 70px;
+            }
+
+            .lower-container {
+                padding: 50px 15px 25px;
+            }
+
+            .lower-container h3 {
+                font-size: 1rem;
+            }
+
+            .lower-container h4 {
+                font-size: 0.7rem;
+            }
+
+            .lower-container p {
+                font-size: 0.8rem;
+            }
+
+            .lower-container .btn {
+                font-size: 0.6rem;
+                padding: 8px 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .card-container {
+                box-shadow: 
+                    4px 4px 0 #ffffff,
+                    8px 8px 0 #f40c3f,
+                    0 0 20px rgba(244, 12, 63, 0.3);
+            }
+
+            .card-container:hover {
+                transform: translate(-2px, -2px);
+                box-shadow: 
+                    6px 6px 0 #ffffff,
+                    10px 10px 0 #f40c3f,
+                    0 0 30px rgba(244, 12, 63, 0.5);
+            }
+        }
+
+        /* ASCII艺术 */
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- 第一部分 - 融合动画 -->
+        <section class="section-fusion">
+            <!-- 标题 -->
+            <div class="title">
+                Ai <span class="accent">Future</span>
+            </div>
+
+            <!-- 学校Logo - 左侧 (CityU) -->
+            <div class="school-logos left">
+                <div class="school-logo">
+                    <img src="imgs/cityu.jpg" alt="City University of Macau">
+                    <div class="school-label">CityU Macau</div>
+                </div>
+            </div>
+
+            <!-- 学校Logo - 右侧 (UNSW) -->
+            <div class="school-logos right">
+                <div class="school-logo">
+                    <img src="imgs/unsw.jpg" alt="University of New South Wales">
+                    <div class="school-label">UNSW Sydney</div>
+                </div>
+            </div>
+
+            <!-- 连接线 -->
+            <div class="connection-line"></div>
+
+            <!-- Loader Animation - 上方 -->
+            <div class="loader">
+                <svg xmlns="http://www.w3.org/2000/svg" width="61.949" height="21.385" viewBox="0 0 61.949 21.385" class="logo">
+                    <g>
+                        <path d="M60.493,3.675,49.176,14.992,37.684,3.5,26.309,14.817,15.05,3.558,3.5,15.167" transform="translate(-1.019 1.443)" fill="none" stroke="#f40c3f" stroke-miterlimit="10" stroke-width="7"/>
+                    </g>
+                    <g>
+                        <rect width="7" height="7" fill="#ffffff" x="-9" y="24"></rect>
+                        <rect width="7" height="7" fill="#ffffff" x="66" y="-9"></rect>
+                        <rect width="7" height="7" fill="#ffffff" x="66" y="-9"></rect>
+                    </g>
+                </svg>
+            </div>
+
+            <!-- Rainbow Animation - 中间 -->
+            <div class="rainbow-container">
+                <svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" width="100" height="100" class="rainbow-svg js-svg">
+                    <mask id="text">
+                        <text x="50%" y="50%" fill="#fff" dominant-baseline="middle" text-anchor="middle">ELVIS</text>
+                    </mask>
+
+                    <filter id="gooey">
+                        <feGaussianBlur in="SourceGraphic" stdDeviation="30" />
+                        <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7" result="goo" />
+                    </filter>
+
+                    <text class="text" x="50%" y="50%" fill="#fff" dominant-baseline="middle" text-anchor="middle">ELVIS</text>
+
+                    <g filter="url(#gooey)" mask="url(#text)" class="js-wrapper"></g>
+                    
+                    <text class="overlay" x="50%" y="50%" fill="#fff" dominant-baseline="middle" text-anchor="middle">ELVIS</text>
+                </svg>
+            </div>
+
+            <!-- 自定义光标 -->
+            <div class="cursor js-cursor"></div>
+
+            <!-- 噪声效果 -->
+            <div class="noise"></div>
+
+            <!-- 导航链接 -->
+            <a href="index.html" class="nav-link">返回主页</a>
+        </section>
+
+        <!-- 第二部分 - Luge Mouse Demo -->
+        <section class="section-luge">
+            <div class="section-title">
+                Mouse <span class="accent">Tracking</span> Demo
+            </div>
+
+            <div class="luge-background">
+                <div class="luge-background__shadow"></div>
+                <div class="luge-background__shadow"></div>
+                <div class="luge-background__shadow"></div>
+            </div>
+
+            <div class="luge-wrapper" data-lg-mouse>
+                <div class="creature">
+                    <div class="creature__horns">
+                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 121.9 176" xml:space="preserve" class="creature__horn">
+                            <defs>
+                                <linearGradient id="hornGradient" gradientUnits="userSpaceOnUse" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0" stop-color="#ffffff"/>
+                                    <stop offset="50" stop-color="#cccccc"/>
+                                    <stop offset="100" stop-color="#f40c3f"/>
+                                </linearGradient>
+                            </defs>
+                            <path fill="url(#hornGradient)" d="M39.7,0c-124,203.4,82.3,174.6,82.3,174.6v-49.9C121.9,124.7,15.3,154.4,39.7,0z"/>
+                        </svg>
+                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 121.9 176" xml:space="preserve" class="creature__horn">
+                            <defs>
+                                <linearGradient id="hornGradient2" gradientUnits="userSpaceOnUse" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0" stop-color="#ffffff"/>
+                                    <stop offset="50" stop-color="#cccccc"/>
+                                    <stop offset="100" stop-color="#f40c3f"/>
+                                </linearGradient>
+                            </defs>
+                            <path fill="url(#hornGradient2)" d="M0,124.7l0,49.9c0,0,206.2,28.8,82.3-174.6C106.6,154.4,0,124.7,0,124.7z"/>
+                        </svg>
+                    </div>
+
+                    <div class="creature__body"></div>
+
+                    <div class="creature__eyes">
+                        <div class="creature__eye"></div>
+                        <div class="creature__eye"></div>
+                    </div>
+
+                    <div class="creature__mouth"></div>
+                </div>
+            </div>
+
+            <div data-lg-cursor data-lg-cursor-hide>
+                <div data-lg-cursor-pointer data-lg-cursor-inertia="0.1"></div>
+                <div data-lg-cursor-pointer></div>
+                <div data-lg-cursor-trail data-lg-cursor-inertia="0.1"></div>
+            </div>
+        </section>
+
+        <!-- 第三部分 - 个人简介 -->
+        <section class="section-profile">
+            <div class="pixel-container">
+                <div class="pixel-title">
+                    <span class="name">高政 / Elvis</span>
+                    <span style="font-size: 0.8rem; color: #cccccc;">AI Enthusiast & Future Developer</span>
+                </div>
+
+                <div class="info-grid">
+                    <div class="info-card" data-title="About Me">
+                        <h3>关于我 / About</h3>
+                        <p>你好！我是高政，一名充满热情的AI爱好者和技术探索者。我对人工智能、机器学习和前端开发有着浓厚的兴趣，总是渴望学习和探索新的技术领域。我相信技术能够改变世界，并希望成为这个变革的一部分。</p>
+                    </div>
+
+                    <div class="info-card" data-title="Education">
+                        <h3>教育背景 / Education</h3>
+                        <ul>
+                            <li>澳门城市大学 - 数据科学学士</li>
+                            <li>City University of Macau - Bachelor of Data Science</li>
+                            <li>新南威尔士大学</li>
+                            <li>UNSW Sydney</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-card" data-title="Skills">
+                        <h3>技能技能</h3>
+                        <ul>
+                            <li>编程语言: Python, JavaScript</li>
+                            <li>AI/ML: TensorFlow, PyTorch, Scikit-learn</li>
+                            <li>工具平台: Git, Linux</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-card" data-title="Interests">
+                        <h3>兴趣爱好 / Interests</h3>
+                        <ul>
+                            <li>人工智能与机器学习研究</li>
+                            <li>音乐与创意设计</li>
+                            <li>Basketball,League of Legends</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div style="margin: 2rem 0;">
+                    <h3 style="font-family: 'Press Start 2P', monospace; color: #f40c3f; text-align: center; margin-bottom: 1.5rem;">技能等级 / Skill Level</h3>
+                    
+                    <div class="skill-bar">
+                        <div class="skill-name">Python & AI/ML</div>
+                        <div class="skill-progress">
+                            <div class="skill-fill" style="width: 85%;"></div>
+                        </div>
+                    </div>
+
+                    <div class="skill-bar">
+                        <div class="skill-name">JavaScript & Frontend</div>
+                        <div class="skill-progress">
+                            <div class="skill-fill" style="width: 80%;"></div>
+                        </div>
+                    </div>
+
+                    <div class="skill-bar">
+                        <div class="skill-name">Mathmatic</div>
+                        <div class="skill-progress">
+                            <div class="skill-fill" style="width: 75%;"></div>
+                        </div>
+                    </div>
+
+                    <div class="skill-bar">
+                        <div class="skill-name">Database & DevOps</div>
+                        <div class="skill-progress">
+                            <div class="skill-fill" style="width: 70%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ascii-art">
+    ╔══════════════════════════════════════╗
+     "Code is poetry, AI is the future"  
+     
+     █████╗ ██╗   ███████╗██╗  ██╗  
+     ██╔══██╗██╗   ██╔════╝██╗  ██╗  
+     ███████║██╗   █████╗  ██╗  ██╗  
+     ██╔══██║██╗   ██╔══╝  ╚██╗██╔╝   
+     ██║ ██║██║    ███████╗ ╚████╔╝   
+     ╚═╝ ╚═╝╚═╝    ╚══════╝  ╚═══╝    
+     
+      "Building the future"          
+    ╚══════════════════════════════════════╝
+                </div>
+
+                <div class="pixel-social">
+                    <a href="#" class="pixel-link">GitHub</a>
+                    <a href="#" class="pixel-link">LinkedIn</a>
+                    <a href="#" class="pixel-link">Email</a>
+                    <a href="#" class="pixel-link">微博</a>
+                </div>
+
+                <div style="text-align: center; margin-top: 2rem;">
+                    <p style="font-family: 'Press Start 2P', monospace; font-size: 0.6rem; color: #666;">
+                        感谢访问我的个人主页  Thanks for visiting!
+                    </p>
+                </div>
+            </div>
+
+            <!-- Profile Card - Neo Brutalism Style -->
+            <div class="profile-card-section">
+                <h3 style="font-family: 'Press Start 2P', monospace; color: #f40c3f; text-align: center; margin: 2rem 0 1.5rem;">开发者档案 / Developer Profile</h3>
+                
+                <div class="card-container">
+                    <div class="upper-container">
+                        <div class="image-container">
+                            <img src="https://api.dicebear.com/7.x/thumbs/svg?seed=Elvis" alt="profile image" />
+                        </div>
+                    </div>
+
+                    <div class="lower-container">
+                        <div>
+                            <h3>高政 Elvis</h3>
+                            <h4>AI Developer & Tech Explorer</h4>
+                        </div>
+                        <div>
+                            <p>专注于人工智能和前端开发，热爱探索新技术，致力于用代码创造美好的未来。</p>
+                        </div>
+                        <div>
+                            <a href="#contact" class="btn">联系我 Contact Me</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 滚动指示器 -->
+        <div class="scroll-indicator">
+            <div class="scroll-text">Scroll to Explore</div>
+            <div class="scroll-icon"></div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script type="module">
+        // 导入 Luge 
+        import WaaarkLuge from "https://cdn.skypack.dev/@waaark/luge@0.6.1-beta";
+
+        // 原有 Rainbow Animation Script (修改为黑白红色调)
+        const svg = document.querySelector('.js-svg')
+        const wrapper = document.querySelector('.js-wrapper')
+        const cursor = document.querySelector('.js-cursor')
+
+        const mouse = {
+            x: 0,
+            y: 0,
+            smoothX: 0,
+            smoothY: 0,
+            vx: 0,
+            vy: 0,
+            smoothVx: 0,
+            smoothVy: 0,
+            diff: 0
+        }
+
+        const head = {
+            x: 0,
+            y: 0,
+            vx: 0,
+            vy: 0
+        }
+
+        const viewport = {
+            width: window.innerWidth,
+            height: window.innerHeight
+        }
+
+        const particles = []
+        let particleCnt = 0
+
+        // Mouse move
+        function onMouseMove(e) {
+            mouse.vx += mouse.x - e.pageX
+            mouse.vy += mouse.y - e.pageY
+            
+            mouse.x = e.pageX
+            mouse.y = e.pageY
+        }
+        window.addEventListener('mousemove', onMouseMove)
+
+        // Resize
+        function onResize() {
+            viewport.width = window.innerWidth
+            viewport.height = window.innerHeight
+            
+            svg.style.width = viewport.width + 'px'
+            svg.style.height = viewport.height + 'px'
+        }
+        window.addEventListener('resize', onResize)
+        onResize()
+
+        // Emitter
+        function emitParticle() {
+            let x = 0
+            let y = 0
+            let vx = 0
+            let vy = 0
+            let size = 0
+            
+            if (mouse.diff > 0.01) {
+                x = mouse.smoothX
+                y = mouse.smoothY
+                vx = mouse.smoothVx * -0.25
+                vy = mouse.smoothVy * -0.25
+                size = mouse.diff * 0.25
+            } else {
+                x = head.x
+                y = head.y
+                vx = head.vx * 2
+                vy = head.vy * 2
+                size = Math.hypot(head.vx, head.vy) * 3
+            }
+
+            const particle = new Particle(x, y, vx, vy, size)
+            particleCnt += 5
+
+            particles.push(particle)
+            wrapper.prepend(particle.el)
+        }
+
+        // Render
+        function render(time) {
+            // Smooth mouse
+            mouse.smoothX += (mouse.x - mouse.smoothX) * 0.1
+            mouse.smoothY += (mouse.y - mouse.smoothY) * 0.1
+            
+            mouse.smoothVx += (mouse.vx - mouse.smoothVx) * 0.1
+            mouse.smoothVy += (mouse.vy - mouse.smoothVy) * 0.1
+            
+            mouse.vx *= 0.85
+            mouse.vy *= 0.85
+            
+            mouse.diff = Math.hypot(mouse.x - mouse.smoothX, mouse.y - mouse.smoothY)
+            
+            emitParticle()
+            
+            // Cursor
+            cursor.style.setProperty('--x', mouse.smoothX + 'px')
+            cursor.style.setProperty('--y', mouse.smoothY + 'px')
+            
+            // Move head
+            const headX = viewport.width * 0.5 + viewport.width * 0.375 * Math.cos(time * 0.0006)
+            const headY = viewport.height * 0.5 + viewport.width * 0.05 * Math.cos(time * 0.0011)
+            
+            head.vx = head.x - headX
+            head.vy = head.y - headY
+            
+            head.x = headX
+            head.y = headY
+            
+            // Render particles
+            particles.forEach(particle => {
+                particle.render(time)
+            })
+            
+            // RAF
+            requestAnimationFrame(render)
+        }
+
+        window.addEventListener('load', render)
+
+        /**
+         * Particle Class (修改为黑白红色调)
+         */
+        class Particle {
+            constructor(x, y, vx, vy, size) {
+                this.size = size
+                this.x = x
+                this.y = y
+                this.vx = vx
+                this.vy = vy
+                this.seed = Math.random() * 1000
+                this.freq = (0.5 + Math.random() * 1) * 0.01
+                this.amplitude = (1 - Math.random() * 2) * 0.5
+                
+                // 黑白红色调配色方案
+                const colors = ['#ffffff', '#f40c3f', '#cccccc', '#888888']
+                this.color = colors[Math.floor(Math.random() * colors.length)]
+
+                this.el = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
+                this.el.setAttribute('cx', this.x)
+                this.el.setAttribute('cy', this.y)
+                this.el.setAttribute('r', this.size)
+                this.el.setAttribute('fill', this.color)
+            }
+            
+            kill() {
+                const self = this
+
+                particles.forEach((particle, index) => {
+                    if (particle === self) {
+                        particles.splice(index, 1)
+                    }
+                })
+        
+                self.el.remove()
+            }
+            
+            render(time) {
+                this.x += Math.cos((time + this.seed) * this.freq) * this.amplitude + this.vx
+                this.y += Math.sin((time + this.seed) * this.freq) * this.amplitude + this.vy
+
+                this.vx *= 0.95
+                this.vy *= 0.95
+                
+                this.size += Math.hypot(this.vx, this.vy)
+                this.size *= 0.85
+
+                this.el.setAttribute('cy', this.y)
+                this.el.setAttribute('cx', this.x)
+                this.el.setAttribute('r', this.size)
+                
+                if (this.size < 1) {
+                    this.kill()
+                }
+            }
+        }
+
+        // 学校Logo交互效果
+        const schoolLogos = document.querySelectorAll('.school-logo')
+        
+        schoolLogos.forEach((logo, index) => {
+            // 点击爆炸效果
+            logo.addEventListener('click', function() {
+                createLogoExplosion(this)
+            })
+            
+            // 鼠标进入时创建粒子
+            logo.addEventListener('mouseenter', function() {
+                createLogoParticles(this)
+            })
+        })
+
+        function createLogoExplosion(logoElement) {
+            const rect = logoElement.getBoundingClientRect()
+            const centerX = rect.left + rect.width / 2
+            const centerY = rect.top + rect.height / 2
+            
+            // 创建爆炸粒子
+            for (let i = 0; i < 20; i++) {
+                const angle = (Math.PI * 2 * i) / 20
+                const speed = 5 + Math.random() * 10
+                const size = 3 + Math.random() * 5
+                
+                const explosionParticle = document.createElement('div')
+                explosionParticle.style.position = 'fixed'
+                explosionParticle.style.left = centerX + 'px'
+                explosionParticle.style.top = centerY + 'px'
+                explosionParticle.style.width = size + 'px'
+                explosionParticle.style.height = size + 'px'
+                explosionParticle.style.background = i % 2 === 0 ? '#f40c3f' : '#ffffff'
+                explosionParticle.style.borderRadius = '50%'
+                explosionParticle.style.pointerEvents = 'none'
+                explosionParticle.style.zIndex = '9999'
+                
+                document.body.appendChild(explosionParticle)
+                
+                // 动画粒子
+                const animation = explosionParticle.animate([
+                    {
+                        transform: 'translate(0, 0) scale(1)',
+                        opacity: 1
+                    },
+                    {
+                        transform: `translate(${Math.cos(angle) * 150}px, ${Math.sin(angle) * 150}px) scale(0)`,
+                        opacity: 0
+                    }
+                ], {
+                    duration: 1000 + Math.random() * 500,
+                    easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+                })
+                
+                animation.onfinish = () => {
+                    explosionParticle.remove()
+                }
+            }
+            
+            // Logo震动效果
+            logoElement.style.animation = 'none'
+            logoElement.style.transform = 'translateY(-50%) scale(1.2)'
+            
+            setTimeout(() => {
+                logoElement.style.transform = 'translateY(-50%) scale(1)'
+                logoElement.style.animation = 'pulse 3s ease-in-out infinite'
+            }, 200)
+        }
+
+        function createLogoParticles(logoElement) {
+            const rect = logoElement.getBoundingClientRect()
+            const centerX = rect.left + rect.width / 2
+            const centerY = rect.top + rect.height / 2
+            
+            // 创建环绕粒子
+            for (let i = 0; i < 8; i++) {
+                const angle = (Math.PI * 2 * i) / 8
+                const radius = 80
+                
+                const orbitParticle = document.createElement('div')
+                orbitParticle.style.position = 'fixed'
+                orbitParticle.style.left = (centerX + Math.cos(angle) * radius) + 'px'
+                orbitParticle.style.top = (centerY + Math.sin(angle) * radius) + 'px'
+                orbitParticle.style.width = '4px'
+                orbitParticle.style.height = '4px'
+                orbitParticle.style.background = '#f40c3f'
+                orbitParticle.style.borderRadius = '50%'
+                orbitParticle.style.pointerEvents = 'none'
+                orbitParticle.style.zIndex = '9998'
+                
+                document.body.appendChild(orbitParticle)
+                
+                // 轨道动画
+                const orbitAnimation = orbitParticle.animate([
+                    {
+                        transform: 'rotate(0deg) translateX(0px) scale(1)',
+                        opacity: 1
+                    },
+                    {
+                        transform: 'rotate(360deg) translateX(20px) scale(0)',
+                        opacity: 0
+                    }
+                ], {
+                    duration: 2000,
+                    easing: 'ease-out'
+                })
+                
+                orbitAnimation.onfinish = () => {
+                    orbitParticle.remove()
+                }
+            }
+        }
+
+        // 连接线脉冲效果
+        const connectionLine = document.querySelector('.connection-line')
+        let pulseInterval
+        
+        schoolLogos.forEach(logo => {
+            logo.addEventListener('mouseenter', () => {
+                clearInterval(pulseInterval)
+                connectionLine.style.animation = 'none'
+                connectionLine.style.opacity = '1'
+                
+                pulseInterval = setInterval(() => {
+                    connectionLine.style.transform = 'scaleY(3)'
+                    setTimeout(() => {
+                        connectionLine.style.transform = 'scaleY(1)'
+                    }, 200)
+                }, 800)
+            })
+            
+            logo.addEventListener('mouseleave', () => {
+                clearInterval(pulseInterval)
+                connectionLine.style.animation = ''
+                connectionLine.style.opacity = ''
+                connectionLine.style.transform = ''
+            })
+        })
+
+        // 滚动指示器逻辑
+        const scrollIndicator = document.querySelector('.scroll-indicator')
+        const loader = document.querySelector('.loader')
+        let currentSection = 1
+
+        function updateScrollIndicator() {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+            const windowHeight = window.innerHeight
+            
+            // 控制loader显示/隐藏
+            if (scrollTop > windowHeight * 0.3) {
+                loader.classList.add('hidden')
+            } else {
+                loader.classList.remove('hidden')
+            }
+            
+            if (scrollTop < windowHeight / 3) {
+                // 在第一部分
+                if (currentSection !== 1) {
+                    currentSection = 1
+                    scrollIndicator.querySelector('.scroll-text').textContent = 'Scroll to Explore'
+                    scrollIndicator.style.display = 'block'
+                }
+            } else if (scrollTop < windowHeight * 1.5) {
+                // 在第二部分
+                if (currentSection !== 2) {
+                    currentSection = 2
+                    scrollIndicator.querySelector('.scroll-text').textContent = 'Scroll for Profile'
+                }
+            } else {
+                // 在第三部�?
+                if (currentSection !== 3) {
+                    currentSection = 3
+                    scrollIndicator.querySelector('.scroll-text').textContent = 'Scroll to Top'
+                }
+            }
+        }
+
+        window.addEventListener('scroll', updateScrollIndicator)
+        updateScrollIndicator()
+
+        // 点击滚动指示器实现平滑滚�?
+        scrollIndicator.addEventListener('click', () => {
+            let targetY = 0
+            if (currentSection === 1) {
+                targetY = window.innerHeight // 到第二部�?
+            } else if (currentSection === 2) {
+                targetY = window.innerHeight * 2 // 到第三部�?
+            } else {
+                targetY = 0 // 回到第一部分
+            }
+            
+            window.scrollTo({
+                top: targetY,
+                behavior: 'smooth'
+            })
+        })
+
+        // 初始�?Luge
+        WaaarkLuge.init()
+    </script>
+</body>
+</html> 

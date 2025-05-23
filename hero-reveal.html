@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elvis Blog</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chivo+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Chivo Mono', monospace;
+            overflow: hidden;
+            cursor: none;
+        }
+
+        /* Hero Section - Light Theme */
+        .s-hero {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000000;
+            color: #ffffff;
+            cursor: none;
+        }
+
+        .s-hero .s__title {
+            position: absolute;
+            top: 2vw;
+            left: 2vw;
+            margin: 0;
+            padding: 0;
+            font-size: 1.25vw;
+            font-weight: 400;
+            color: #cccccc;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .s-hero .s__catcher {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            font-weight: 700;
+            font-size: 13vw;
+            letter-spacing: -0.025em;
+            text-align: center;
+            white-space: nowrap;
+            color: #ffffff;
+            text-transform: uppercase;
+        }
+
+        .s-hero .s__burger {
+            position: absolute;
+            top: 2vw;
+            right: 2vw;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            justify-content: center;
+            width: 56px;
+            height: 48px;
+            cursor: pointer;
+        }
+
+        .s-hero .s__burger__line {
+            margin: 5px 0;
+            width: 100%;
+            height: 2px;
+            background: #f40c3f;
+            transition: all 0.3s ease;
+        }
+
+        .s-hero .s__burger:hover .s__burger__line {
+            background: #ffffff;
+        }
+
+        .s-hero .s__nav-link {
+            position: absolute;
+            bottom: 2vw;
+            right: 2vw;
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+        }
+
+        .s-hero .s__nav-link:hover {
+            color: #f40c3f;
+        }
+
+        /* Scene - Dark Theme with Reveal */
+        .s-scene {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #000000, #1a1a1a);
+            clip-path: inset(100%);
+            color: #ffffff;
+            pointer-events: none;
+        }
+
+        .s-scene .s__title {
+            position: absolute;
+            top: 2vw;
+            right: 2vw;
+            left: 2vw;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            font-weight: 700;
+            font-size: 13vw;
+            letter-spacing: -0.025em;
+            line-height: 0.9;
+            text-transform: uppercase;
+        }
+
+        .s-scene .s__title__line:nth-child(1) {
+            color: #ffffff;
+        }
+
+        .s-scene .s__title__line:nth-child(2) {
+            margin-left: auto;
+            color: #f40c3f;
+        }
+
+        .s-scene .s__word {
+            --max-scale: 3;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            flex-direction: row;
+            font-family: 'Chivo Mono', monospace;
+            font-size: 20vw;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        @keyframes char-scale {
+            0% {
+                scale: 1 0.1;
+            }
+            50% {
+                scale: 1 var(--max-scale);
+            }
+            100% {
+                scale: 1 0.1;
+            }
+        }
+
+        .s-scene .s__word__char {
+            animation: char-scale 1.25s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+            transform-origin: 50% 86.5%;
+        }
+
+        .s-scene .s__word__char:nth-child(1) {
+            color: #f40c3f;
+        }
+
+        .s-scene .s__word__char:nth-child(2) {
+            color: #ffffff;
+            animation-delay: 0.25s;
+        }
+
+        .s-scene .s__word__char:nth-child(3) {
+            color: #f40c3f;
+            animation-delay: 0.5s;
+        }
+
+        .s-scene .s__word__char:nth-child(4) {
+            color: #ffffff;
+            animation-delay: 0.75s;
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            position: fixed;
+            top: -1.5vw;
+            left: -1.5vw;
+            z-index: 2;
+            width: 3vw;
+            height: 3vw;
+            background: radial-gradient(circle, #ffffff, #f40c3f);
+            border-radius: 50%;
+            transform: translate3d(var(--x), var(--y), 0);
+            pointer-events: none;
+            filter: blur(1px);
+            mix-blend-mode: difference;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .s-hero .s__title {
+                font-size: 3vw;
+            }
+            
+            .s-hero .s__catcher {
+                font-size: 18vw;
+            }
+            
+            .s-scene .s__title {
+                font-size: 18vw;
+            }
+            
+            .s-scene .s__word {
+                font-size: 25vw;
+            }
+            
+            .cursor {
+                width: 8vw;
+                height: 8vw;
+                top: -4vw;
+                left: -4vw;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .s-hero .s__catcher {
+                font-size: 22vw;
+            }
+            
+            .s-scene .s__title {
+                font-size: 22vw;
+            }
+            
+            .s-scene .s__word {
+                font-size: 30vw;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section (Background Layer) -->
+    <div class="s-hero">
+        <h1 class="s__title">
+            Elvis's Blog<br/>
+            Enjoy the journey<br/>
+            Since 2024
+        </h1>
+        
+        <div class="s__catcher">
+            Ai Future
+        </div>
+        
+        <div class="s__burger">
+            <div class="s__burger__line"></div>
+            <div class="s__burger__line"></div>
+            <div class="s__burger__line"></div>
+        </div>
+
+        <a href="index.html" class="s__nav-link">进入博客 →</a>
+    </div>
+
+    <!-- Scene (Reveal Layer) -->
+    <div class="s-scene js-scene">
+        <div class="s__title">
+            <div class="s__title__line">
+                探索
+            </div>
+            <div class="s__title__line">
+                无限可能
+            </div>
+        </div>
+        
+        <div class="s__word js-word">
+            <div class="s__word__char">T</div>
+            <div class="s__word__char">E</div>
+            <div class="s__word__char">C</div>
+            <div class="s__word__char">H</div>
+        </div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor js-cursor"></div>
+
+    <!-- JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+        // Selectors
+        const scene = document.querySelector('.js-scene')
+        const cursor = document.querySelector('.js-cursor')
+        const word = document.querySelector('.js-word')
+
+        const mouse = {
+            x: window.innerWidth / 2,
+            y: window.innerHeight / 2,
+            smoothX: window.innerWidth / 2,
+            smoothY: window.innerHeight / 2,
+            diff: 0,
+            smoothDiff: 0,
+            a: 0
+        }
+
+        const viewport = {
+            width: window.innerWidth,
+            height: window.innerHeight
+        }
+
+        const particles = []
+        let particleCnt = 0
+
+        // Mouse move
+        function onMouseMove(e) {
+            mouse.x = e.pageX
+            mouse.y = e.pageY
+        }
+        window.addEventListener('mousemove', onMouseMove)
+
+        // Resize
+        function onResize() {
+            viewport.width = window.innerWidth
+            viewport.height = window.innerHeight
+            
+            const wordHeight = word.clientHeight
+            const maxScale = viewport.height / (word.clientHeight * 0.75)
+            word.style.setProperty('--max-scale', maxScale)
+        }
+        window.addEventListener('resize', onResize)
+        onResize()
+
+        // Emitter
+        function emitParticle() {
+            let x = 0
+            let y = 0
+            let size = 0
+            
+            if (mouse.diff > 0.01) {
+                x = mouse.smoothX
+                y = mouse.smoothY
+                size = mouse.diff * 0.2
+            }
+            
+            if (size === 0) return
+
+            const particle = new Particle(x, y, size)
+            particleCnt += 5
+
+            particles.push(particle)
+        }
+
+        // Draw path
+        function drawPath() {
+            let d = ''
+            
+            particles.forEach((particle, i) => {
+                const cmd = i === 0 ? 'M' : 'L'
+                const p1 = particle.position()
+                
+                const particle2 = particles[i + 1] || particles[particles.length - 1]
+                const p2 = particle2.position()
+                
+                if (i > 0) {
+                    d += `Q ${p1.x} ${p1.y} ${(p1.x + p2.x) / 2} ${(p1.y + p2.y) / 2} `
+                } else {
+                    d += `${cmd} ${p1.x} ${p1.y} `
+                }
+            })
+            
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const particle = particles[i]
+                const p1 = particle.position(1)
+                
+                const particle2 = particles[i - 1] || particles[0]
+                const p2 = particle2.position(1)
+
+                d += `Q ${p1.x} ${p1.y} ${(p1.x + p2.x) / 2} ${(p1.y + p2.y) / 2} `
+            }
+            
+            scene.style.clipPath = `path('${d}')`
+        }
+
+        // Render
+        function render(time) {
+            // Smooth mouse
+            mouse.smoothX += (mouse.x - mouse.smoothX) * 0.1
+            mouse.smoothY += (mouse.y - mouse.smoothY) * 0.1
+            
+            const dx = mouse.x - mouse.smoothX
+            const dy = mouse.y - mouse.smoothY
+            
+            mouse.diff = Math.hypot(dx, dy)
+            
+            mouse.smoothDiff += (mouse.diff - mouse.smoothDiff) * 0.1
+        
+            if (mouse.diff > 0.1) {
+                mouse.a = Math.atan2(dy, dx)
+            }
+            
+            emitParticle()
+            
+            // Cursor
+            cursor.style.setProperty('--x', mouse.smoothX + 'px')
+            cursor.style.setProperty('--y', mouse.smoothY + 'px')
+            
+            // Draw path
+            drawPath()
+            
+            // RAF
+            requestAnimationFrame(render)
+        }
+
+        window.addEventListener('load', render)
+
+        // Particle Class
+        class Particle {
+            constructor(x, y, size) {
+                this.size = size
+                this.x = x
+                this.y = y
+                this.p = 0
+                
+                const perpendicular = mouse.a + Math.PI / 2
+                const dist = Math.max(viewport.width * 0.0075, mouse.smoothDiff)
+                this.offsetX = dist * Math.cos(perpendicular) 
+                this.offsetY = dist * Math.sin(perpendicular) 
+
+                // Lifetime
+                const tl = gsap.timeline()
+                tl.to(this, {
+                    p: 1,
+                    ease: 'power1.inOut',
+                    duration: 2
+                })
+                
+                tl.to(this, {
+                    p: 0,
+                    ease: 'power4.in',
+                    duration: 4
+                }, 3)
+                
+                tl.call(this.kill.bind(this))
+            }
+            
+            position(direction = -1) {
+                return {
+                    x: this.x + this.offsetX * direction * this.p,
+                    y: this.y + this.offsetY * direction * this.p
+                }
+            }
+            
+            kill() {
+                const self = this
+                particles.forEach((particle, index) => {
+                    if (particle === self) {
+                        particles.splice(index, 1)
+                    }
+                })
+            }
+        }
+
+        // Additional interactions
+        const burger = document.querySelector('.s__burger')
+        burger.addEventListener('click', () => {
+            window.location.href = 'index.html'
+        })
+    </script>
+</body>
+</html> 

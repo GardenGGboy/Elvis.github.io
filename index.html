@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elvis's Blog</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chivo+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <tech-blog>
+        <div class="badge js-badge">
+            <a href="hero-reveal.html" class="badge-link">
+                <div class="badge__content">
+                    <h1 class="blog-title">
+                        <span class="title-main">Elvis</span>
+                        <span class="title-accent">Zheng</span>
+                    </h1>
+                    <p class="blog-subtitle">I am GZ</p>
+                </div>
+                
+                <span class="badge__explore">
+                    Enter the Portal!
+                </span>
+            </a>
+        </div>
+
+        <div class="aura"></div>
+        <div class="overlay"></div>
+        <canvas class="js-canvas"></canvas>
+
+        <!-- 新增：导航菜单 -->
+        <div class="nav-menu">
+            <a href="cosmic-dreams-css/dist/index.html" class="nav-item">
+                <span class="nav-icon">🌌</span>
+                <span class="nav-text">Cosmic Dreams</span>
+            </a>
+            <a href="fusion-animation.html" class="nav-item">
+                <span class="nav-icon">👨‍💻</span>
+                <span class="nav-text">About Me</span>
+            </a>
+            <a href="hero-reveal.html" class="nav-item">
+                <span class="nav-icon">🌟</span>
+                <span class="nav-text">Hero Portal</span>
+            </a>
+        </div>
+    </tech-blog>
+
+    <script type="module" src="script.js"></script>
+    
+    <style>
+        /* 导航菜单样式 */
+        .nav-menu {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1rem;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem;
+            background: rgba(244, 12, 63, 0.1);
+            border: 1px solid #f40c3f;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            color: #ffffff;
+            font-family: 'Chivo Mono', monospace;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            min-width: 120px;
+        }
+
+        .nav-item:hover {
+            background: rgba(244, 12, 63, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(244, 12, 63, 0.3);
+        }
+
+        .nav-icon {
+            font-size: 1.5rem;
+            filter: grayscale(1);
+            transition: filter 0.3s ease;
+        }
+
+        .nav-item:hover .nav-icon {
+            filter: grayscale(0);
+        }
+
+        .nav-text {
+            font-size: 0.7rem;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .nav-menu {
+                flex-direction: column;
+                bottom: 1rem;
+                left: 1rem;
+                transform: none;
+                gap: 0.5rem;
+            }
+
+            .nav-item {
+                flex-direction: row;
+                padding: 0.8rem;
+                min-width: auto;
+            }
+
+            .nav-text {
+                font-size: 0.6rem;
+            }
+        }
+    </style>
+</body>
+</html> 

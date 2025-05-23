@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BB-8 聊天测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #1a1a1a;
+            color: white;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .status {
+            background: #2a2a2a;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        .success { border-left: 4px solid #4CAF50; }
+        .error { border-left: 4px solid #f44336; }
+        .warning { border-left: 4px solid #ff9800; }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🤖 BB-8 聊天系统测试</h1>
+        
+        <div class="status success">
+            <h3>✅ 修复完成的问题：</h3>
+            <ul>
+                <li><strong>聊天按钮位置</strong>：已移动到页面底部中央</li>
+                <li><strong>BB-8个性设置</strong>：已设置为Elvis建造的机器人，专门解决用户不开心的问题</li>
+                <li><strong>系统Prompt</strong>：已配置完整的中文个性化提示</li>
+            </ul>
+        </div>
+
+        <div class="status warning">
+            <h3>⚙️ 系统配置：</h3>
+            <ul>
+                <li><strong>API密钥</strong>：已内置在系统中</li>
+                <li><strong>模型</strong>：gpt-4o-mini</li>
+                <li><strong>API端点</strong>：chatanywhere.org</li>
+                <li><strong>字符限制</strong>：150 tokens</li>
+            </ul>
+        </div>
+
+        <div class="status" id="test-status">
+            <h3>🧪 测试结果：</h3>
+            <p>点击下面的按钮进行功能测试</p>
+        </div>
+
+        <div>
+            <button onclick="testElements()">检查HTML元素</button>
+            <button onclick="testCSS()">检查CSS样式</button>
+            <button onclick="testJS()">检查JavaScript</button>
+            <button onclick="openMainPage()">打开主页面</button>
+        </div>
+
+        <div id="test-results"></div>
+    </div>
+
+    <script>
+        function testElements() {
+            const results = document.getElementById('test-results');
+            results.innerHTML = '<h4>HTML元素检查结果：</h4>';
+            
+            // 检查主要聊天元素
+            const elements = [
+                'chat-toggle',
+                'chat-box', 
+                'chat-messages',
+                'chat-input',
+                'send-btn',
+                'chat-bubble'
+            ];
+            
+            elements.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    results.innerHTML += `<p style="color: green;">✅ #${id} 元素存在</p>`;
+                } else {
+                    results.innerHTML += `<p style="color: red;">❌ #${id} 元素缺失</p>`;
+                }
+            });
+        }
+
+        function testCSS() {
+            const results = document.getElementById('test-results');
+            results.innerHTML = '<h4>CSS样式检查结果：</h4>';
+            
+            // 检查CSS文件是否加载
+            const cssLoaded = document.styleSheets.length > 0;
+            if (cssLoaded) {
+                results.innerHTML += `<p style="color: green;">✅ CSS文件已加载 (${document.styleSheets.length} 个样式表)</p>`;
+            } else {
+                results.innerHTML += `<p style="color: red;">❌ CSS文件未加载</p>`;
+            }
+            
+            // 检查关键CSS类
+            const testDiv = document.createElement('div');
+            testDiv.className = 'chat-toggle-btn';
+            document.body.appendChild(testDiv);
+            
+            const styles = window.getComputedStyle(testDiv);
+            const position = styles.position;
+            const bottom = styles.bottom;
+            const left = styles.left;
+            
+            if (position === 'fixed' && bottom !== 'auto' && left === '50%') {
+                results.innerHTML += `<p style="color: green;">✅ 聊天按钮样式正确 (position: ${position}, bottom: ${bottom}, left: ${left})</p>`;
+            } else {
+                results.innerHTML += `<p style="color: orange;">⚠️ 聊天按钮样式待验证 (position: ${position}, bottom: ${bottom}, left: ${left})</p>`;
+            }
+            
+            document.body.removeChild(testDiv);
+        }
+
+        function testJS() {
+            const results = document.getElementById('test-results');
+            results.innerHTML = '<h4>JavaScript检查结果：</h4>';
+            
+            // 检查全局对象
+            if (typeof BB8ChatSystem !== 'undefined') {
+                results.innerHTML += `<p style="color: green;">✅ BB8ChatSystem 类已定义</p>`;
+            } else {
+                results.innerHTML += `<p style="color: red;">❌ BB8ChatSystem 类未定义</p>`;
+            }
+            
+            if (typeof window.bb8Chat !== 'undefined') {
+                results.innerHTML += `<p style="color: green;">✅ bb8Chat 实例已创建</p>`;
+            } else {
+                results.innerHTML += `<p style="color: orange;">⚠️ bb8Chat 实例未创建 (可能页面未完全加载)</p>`;
+            }
+        }
+
+        function openMainPage() {
+            window.open('index.html', '_blank');
+        }
+
+        // 页面加载后自动检查
+        document.addEventListener('DOMContentLoaded', function() {
+            const statusDiv = document.getElementById('test-status');
+            statusDiv.innerHTML = `
+                <h3>🧪 自动测试结果：</h3>
+                <p style="color: green;">✅ 测试页面加载成功</p>
+                <p style="color: green;">✅ JavaScript运行正常</p>
+                <p>请点击上方按钮进行详细测试，或直接打开主页面查看效果</p>
+            `;
+            statusDiv.className = 'status success';
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,93 @@
+{
+  "name": "tech-blog-digital-future",
+  "version": "1.0.0",
+  "description": "一个基于2025 Webby Award提名项目设计风格的现代个人博客网站，采用科技未来主义风格，融合霓虹色彩、动态粒子效果和现代交互设计。",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "dev": "live-server --port=8000 --open=/index.html",
+    "build": "echo 'No build step required for static site'",
+    "preview": "python -m http.server 3000"
+  },
+  "keywords": [
+    "blog",
+    "personal-website",
+    "webby-award",
+    "tech-blog",
+    "cyberpunk",
+    "futuristic",
+    "particles",
+    "canvas-animation",
+    "web-components",
+    "responsive-design"
+  ],
+  "author": {
+    "name": "Tech Blog Developer",
+    "email": "hello@techblog.com",
+    "url": "https://github.com/your-username"
+  },
+  "license": "MIT",
+  "homepage": "https://your-domain.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/tech-blog-digital-future.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/tech-blog-digital-future/issues"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ],
+  "files": [
+    "index.html",
+    "article.html",
+    "style.css",
+    "script.js",
+    "README.md"
+  ],
+  "config": {
+    "port": 8000,
+    "host": "localhost"
+  },
+  "meta": {
+    "designSystem": {
+      "colors": {
+        "primary-red": "#f40c3f",
+        "primary-cyan": "#00f8f1",
+        "primary-orange": "#ffbd1e",
+        "bg-dark": "#141414",
+        "bg-darker": "#0a0a0a"
+      },
+      "fonts": {
+        "main": "Inter",
+        "mono": "Chivo Mono"
+      },
+      "animations": {
+        "particles": 100,
+        "lines": 50,
+        "circles": 8
+      }
+    },
+    "features": [
+      "Canvas particle system",
+      "Geometric animations",
+      "Mouse interactions",
+      "Scroll parallax",
+      "Responsive design",
+      "Web Components",
+      "Modern CSS Grid/Flexbox",
+      "Intersection Observer animations"
+    ],
+    "inspiration": "2025 Webby Award Nominee project",
+    "theme": "Cyberpunk/Futuristic Tech"
+  }
+} 
